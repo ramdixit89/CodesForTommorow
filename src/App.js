@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useContext } from 'react';
+import Cards from './components/Cards';
+import Loading from './components/Loading';
+import { AppContext, AppProvider } from './contextAPI/AppContext';
 
-function App() {
+const App = () => {
+  const { state, dispatch } = useContext(AppContext);
+
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }, 5000);
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {state.loading ? <Loading /> : <Cards />}
+    </>
   );
-}
+};
 
-export default App;
+const AppWrapper = () => (
+  <AppProvider>
+    <App />
+  </AppProvider>
+);
+
+export default AppWrapper;
+
